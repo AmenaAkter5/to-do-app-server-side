@@ -1,7 +1,7 @@
 // require express, cors, mongodb and dotenv to secure database pass
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 
@@ -35,6 +35,7 @@ async function run() {
         const taskCollection = client.db("to_do_app").collection("tasks");
 
 
+
         // tasks collection API
 
         // Make API : get all task data from server
@@ -48,7 +49,7 @@ async function run() {
         })
 
 
-        // POST item : add a new task
+        // POST task : add a new task
         // link: http://localhost:5000/tasks
 
         app.post('/tasks', async (req, res) => {
@@ -56,6 +57,18 @@ async function run() {
             const result = await taskCollection.insertOne(newTask);
             res.send(result);
         })
+
+
+        // delete data : delete a specific task data
+        // link: http://localhost:5000/tasks/${id}
+
+        app.delete('/task/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const result = await taskCollection.deleteOne(query);
+            res.send(result);
+        })
+
 
     }
     finally {
