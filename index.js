@@ -38,11 +38,12 @@ async function run() {
 
         // tasks collection API
 
+
         // Make API : get all task data from server
-        // link: http://localhost:5000/tasks
 
         app.get('/tasks', async (req, res) => {
-            const query = {};
+            const email = req.query.email;
+            const query = { email };
             const cursor = taskCollection.find(query);
             const tasks = await cursor.toArray();
             res.send(tasks);
@@ -50,7 +51,6 @@ async function run() {
 
 
         // POST task : add a new task
-        // link: http://localhost:5000/tasks
 
         app.post('/tasks', async (req, res) => {
             const newTask = req.body;
@@ -60,7 +60,6 @@ async function run() {
 
 
         // delete data : delete a specific task data
-        // link: http://localhost:5000/tasks/${id}
 
         app.delete('/task/:id', async (req, res) => {
             const id = req.params.id;
